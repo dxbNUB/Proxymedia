@@ -24,8 +24,11 @@ export default function Hero() {
     damping: 28,
     restDelta: 0.001,
   })
-  const y = useTransform(smooth, [0, 1], ['0%', '14%'])
-  const scale = useTransform(smooth, [0, 1], [1.04, 1.14])
+  // Kept shallow on purpose. A photograph scaled past ~1.08 is being resampled
+  // well beyond its natural size while it moves, which reads as softness and
+  // edge shimmer rather than depth.
+  const y = useTransform(smooth, [0, 1], ['0%', '10%'])
+  const scale = useTransform(smooth, [0, 1], [1.03, 1.08])
 
   return (
     <section className="bg-paper">
@@ -33,7 +36,7 @@ export default function Hero() {
           the business in one picture — copy sits over the field side. */}
       <div
         ref={ref}
-        className="relative flex min-h-[70svh] items-center overflow-hidden md:min-h-[76svh]"
+        className="relative isolate flex min-h-[70svh] items-center overflow-hidden md:min-h-[76svh]"
       >
         <motion.div
           className="absolute inset-0 will-change-transform"
@@ -71,21 +74,22 @@ export default function Hero() {
           <div className="max-w-[42rem]">
             <Reveal>
               <div className="rule w-24" />
-              <p className="eyebrow mt-5">AI automation for agricultural exporters</p>
+              <p className="eyebrow mt-5">AI automation for businesses in the UAE and GCC</p>
             </Reveal>
 
             <Headline
               as="h1"
-              text="We automate the admin behind every shipment."
-              accent="every shipment."
+              text="We automate your business."
+              accent="your business."
               className="mt-6 text-[46px] leading-[0.98] font-semibold tracking-[-0.04em] text-ink md:text-[74px]"
             />
 
             <Reveal delay={620}>
               <p className="mt-8 max-w-[32rem] text-[18px] leading-[1.6] text-slate">
-                Chasing payments, export documents, data entry, knowing where
-                every consignment is — we build software that does all of it,
-                then run it for you.
+                Chasing unpaid invoices, producing your documents, keying in
+                orders from email and WhatsApp, reporting where everything
+                stands — we build software that does all of it, then run it
+                for you.
               </p>
             </Reveal>
 

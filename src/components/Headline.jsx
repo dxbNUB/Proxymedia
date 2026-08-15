@@ -40,7 +40,10 @@ export default function Headline({
           observer.disconnect()
         }
       },
-      { rootMargin: '0px 0px -8% 0px', threshold: 0.15 },
+      // See Reveal.jsx: a fractional threshold strands anything taller than
+      // the viewport at opacity 0. A big hero headline on a short screen is
+      // exactly that case.
+      { rootMargin: '0px 0px -8% 0px', threshold: 0 },
     )
 
     observer.observe(node)

@@ -50,19 +50,41 @@ body {
    resolves through these variables, so redefining them on a wrapper turns the
    whole subtree light — no parallel set of classes to maintain. */
 .on-light {
-  /* Muted sage — a light tone, not a bright one. Sits well below white so it
-     reads as the same material as the dark ground, just lit. */
-  --color-paper: #bdc9bc;
-  --color-paper-2: #b4c1b3;
-  --color-card: #dde5db;
+  /* Pale sage, not white. Sits roughly midway between the old muted sage and
+     paper — enough light to lift the section off the dark ground, not so much
+     that it glares between two near-black neighbours. Cards step up a shade
+     rather than going white, so surfaces separate by tone within one family. */
+  --color-paper: #d8e3d9;
+  --color-paper-2: #cfdcd1;
+  --color-card: #e2ebe3;
   --color-ink: #0e1612;
-  --color-slate: #3a4640;
-  --color-mute: #58645e;
-  --color-rule: rgb(14 22 18 / 0.2);
-  --color-cobalt-2: #2aa877;
+  --color-slate: #374540;
+  --color-mute: #54615b;
+  --color-rule: rgb(14 22 18 / 0.16);
+
+  /* Mint at #35c48b is a screen colour: on a light ground it glows and lands
+     near 2:1 — the "neon" problem, and unreadable besides. Both accents are
+     the same hues taken down until they hold on sage: green 5.6:1 as text,
+     7.3:1 white-on-green filled; clay 4.8:1 as text. */
+  --color-cobalt: #086340;
+  --color-cobalt-2: #065032;
+  --color-cobalt-ink: #ffffff;
+  --color-flame: #99480a;
+  --color-flame-2: #8c4108;
 
   background: var(--color-paper);
   color: var(--color-ink);
+}
+
+/* Two variants hardcode white borders/underlines for the dark ground; on
+   paper they vanish. Outline buttons take the clay edge — on sage it is the
+   warm note that keeps the section from reading as one flat green. */
+.on-light .border-white\/20 {
+  border-color: rgb(153 72 10 / 0.4);
+}
+
+.on-light .decoration-white\/25 {
+  text-decoration-color: rgb(14 22 18 / 0.28);
 }
 
 .on-light .on-dark {
@@ -71,21 +93,32 @@ body {
   --color-mute: #7c8983;
   --color-rule: rgb(255 255 255 / 0.14);
 
+  /* Back to screen mint and flame — a dark panel nested in a light section is
+     dark ground again, and the inked-for-paper versions would disappear. */
+  --color-cobalt: #35c48b;
+  --color-cobalt-2: #4bd79b;
+  --color-cobalt-ink: #062018;
+  --color-flame: #e8853a;
+  --color-flame-2: #ffa55e;
+
   background: #15211c;
   color: var(--color-ink);
 }
 
 /* Cards on paper want a real shadow rather than a darker plane. Tinted green
    so the shade belongs to the same light as everything else. */
+/* Clay outline, warming on approach — pricing cards read as objects sitting on
+   the sage rather than panels cut out of it. The shade underneath stays green,
+   so the warmth lives only in the edge. */
 .on-light .card {
-  border-color: rgb(14 22 18 / 0.1);
+  border-color: rgb(153 72 10 / 0.22);
   box-shadow:
     0 1px 2px rgb(14 22 18 / 0.08),
     0 12px 26px -18px rgb(14 22 18 / 0.35);
 }
 
 .on-light .card:hover {
-  border-color: rgb(14 22 18 / 0.22);
+  border-color: rgb(153 72 10 / 0.5);
   box-shadow:
     0 2px 4px rgb(14 22 18 / 0.1),
     0 28px 52px -28px rgb(14 22 18 / 0.55);
@@ -184,9 +217,14 @@ body {
 
 @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
   .glass-bar {
-    background: rgb(15 26 22 / 0.55);
-    backdrop-filter: blur(22px) saturate(1.7);
-    -webkit-backdrop-filter: blur(22px) saturate(1.7);
+    /* Blur radius is the single most expensive thing on the page: the header
+       is fixed over a parallaxing photograph, so the browser re-samples and
+       re-blurs that strip on every scroll frame. 22px + saturate(1.7) was
+       enough to drop frames on mid-range phones; 14px is visually near
+       identical and much cheaper. */
+    background: rgb(15 26 22 / 0.62);
+    backdrop-filter: blur(14px) saturate(1.35);
+    -webkit-backdrop-filter: blur(14px) saturate(1.35);
   }
 }
 
@@ -313,10 +351,19 @@ body {
   z-index: 40;
   pointer-events: none;
   opacity: 0.032;
+  /* Promote to its own layer. A full-viewport fixed overlay that the browser
+     has not promoted gets repainted against the scrolling content beneath it,
+     which is what makes grain appear to crawl or strobe while scrolling —
+     iOS Safari especially. */
+  transform: translateZ(0);
+  backface-visibility: hidden;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Photographic grain, on images. */
+/* Photographic grain, on images. The frame this sits in must carry `isolate`
+   (see ParallaxImage and Hero): a blend with no stacking context of its own
+   composites against everything behind it, so over a parallaxing photograph
+   the browser re-blends that whole region every frame — visible as shimmer. */
 .grain {
   opacity: 0.14;
   mix-blend-mode: overlay;

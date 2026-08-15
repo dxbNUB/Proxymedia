@@ -37,7 +37,11 @@ export default function Reveal({
           observer.disconnect()
         }
       },
-      { rootMargin: '0px 0px -10% 0px', threshold: 0.15 },
+      // threshold 0, not a fraction: a section taller than the viewport can
+      // never have 15% of itself on screen at once, so a fractional threshold
+      // meant tall blocks stayed at opacity 0 forever. rootMargin alone gives
+      // the "wait until it is properly in frame" feel, at any element height.
+      { rootMargin: '0px 0px -10% 0px', threshold: 0 },
     )
 
     observer.observe(node)

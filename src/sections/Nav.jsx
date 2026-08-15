@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import Button from '../components/Button'
+import Logo from '../components/Logo'
 import useScrollSpy from '../hooks/useScrollSpy'
 
 const links = [
@@ -45,11 +46,8 @@ export default function Nav() {
           scrolled ? 'py-3.5' : 'py-6'
         }`}
       >
-        <Link to="/" className="flex items-baseline gap-2">
-          <span className="text-[18px] font-semibold tracking-[-0.03em] text-ink">
-            Proxymedia
-          </span>
-          <span className="h-1.5 w-1.5 translate-y-[-1px] rounded-full bg-flame" />
+        <Link to="/" aria-label="Proxymedia — home" className="flex items-center">
+          <Logo size={24} stroke={2.9} />
         </Link>
 
         <div className="hidden items-center gap-9 text-[14.5px] text-slate md:flex">

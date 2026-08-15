@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import Logo from '../components/Logo'
 
 const nav = [
   { to: '/what-we-do', label: 'What we do' },
@@ -12,11 +13,12 @@ export default function Footer() {
       <div className="mx-auto max-w-[1280px] px-6 py-14 md:px-10">
         <div className="flex flex-col gap-8 border-b border-white/[0.08] pb-10 md:flex-row md:items-start md:justify-between">
           <div className="max-w-sm">
-            <Link to="/" className="flex items-baseline gap-2">
-              <span className="text-[17px] font-semibold tracking-[-0.03em] text-ink">
-                Proxymedia
-              </span>
-              <span className="h-1.5 w-1.5 translate-y-[-1px] rounded-full bg-flame" />
+            <Link to="/" aria-label="Proxymedia — home" className="flex items-center">
+              <Logo
+                size={23}
+                stroke={2.9}
+                wordmarkClass="text-[17px] font-semibold tracking-[-0.03em] text-ink"
+              />
             </Link>
             <p className="mt-4 text-[14.5px] leading-[1.6] text-mute">
               AI automation for businesses in the UAE, Saudi Arabia and the

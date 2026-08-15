@@ -33,7 +33,10 @@ export default function PipelineDiagram() {
           observer.disconnect()
         }
       },
-      { threshold: 0.25 },
+      // Not a fraction — on a narrow screen this diagram stacks taller than
+      // the viewport, and an unfired observer leaves the pipes undrawn and the
+      // nodes at opacity 0, i.e. an empty box.
+      { rootMargin: '0px 0px -8% 0px', threshold: 0 },
     )
     observer.observe(node)
     return () => observer.disconnect()

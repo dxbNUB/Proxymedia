@@ -8,29 +8,29 @@ import SectionHeading from '../components/SectionHeading'
 const systems = [
   {
     n: '01',
-    build: 'A follow-up system',
-    helps: 'Payments and shipment updates chase themselves. You get paid sooner.',
+    build: 'Payment follow-up',
+    helps: 'Unpaid invoices chased on a schedule, by email and WhatsApp, until the money lands. You get paid sooner without anyone nagging.',
   },
   {
     n: '02',
-    build: 'A document generator',
-    helps: 'Export paperwork produced from one set of details, ready before the truck leaves.',
+    build: 'Document generation',
+    helps: 'Invoices, customs paperwork and certificates produced from one set of details — filled, formatted and filed before the truck leaves.',
   },
   {
     n: '03',
-    build: 'An order intake system',
-    helps: 'Orders read from email, WhatsApp and PDF, checked, and entered for you.',
+    build: 'Order intake',
+    helps: 'Orders read straight out of email, WhatsApp and PDFs, checked against your rules, and entered into your system for you.',
   },
   {
     n: '04',
-    build: 'An operations dashboard',
-    helps: 'One live screen for where every consignment is and who owes you what.',
+    build: 'Operations dashboard',
+    helps: 'One live screen showing where every job stands, what is overdue and who owes you what — instead of five spreadsheets.',
   },
 ]
 
 export default function ServicesTeaser() {
   return (
-    <section id="capabilities" className="scroll-mt-24 bg-paper-2">
+    <section id="capabilities" className="on-light scroll-mt-24">
       <div className="mx-auto max-w-[1280px] px-6 py-24 md:px-10 md:py-32">
         <SectionHeading
           eyebrow="What we do"
@@ -40,17 +40,24 @@ export default function ServicesTeaser() {
 
         {/* One diagram, doing the job a paragraph would do worse. */}
         <Reveal delay={300} className="mt-14 overflow-x-auto">
-          <div className="min-w-[640px] rounded-card border border-white/10 bg-paper px-6 py-8 md:min-w-0 md:px-10">
+          {/* The diagram is drawn for dark ground — white rules, light labels —
+              so on paper it keeps its own dark panel. It reads as a screen set
+              into the page, which is what it is. */}
+          <div className="on-dark min-w-[640px] rounded-panel border border-white/10 px-6 py-8 md:min-w-0 md:px-10">
             <FlowDiagram />
           </div>
         </Reveal>
 
-        <div className="mt-6 grid gap-px overflow-hidden rounded-card bg-white/10 sm:grid-cols-2">
+        {/* Hairline grid: the gap is the rule colour showing through, so it
+            follows the section's palette instead of assuming white. */}
+        <div className="mt-6 grid gap-px overflow-hidden rounded-card bg-rule sm:grid-cols-2">
           {systems.map((s, i) => (
             <Reveal
               key={s.build}
               delay={i * 80}
-              className="bg-paper-2 p-9 transition-colors duration-500 hover:bg-card"
+              // Clay edge on approach. Border is present but transparent at
+              // rest, so nothing shifts when it colours in.
+              className="border-l-2 border-transparent bg-paper p-9 transition-colors duration-500 hover:border-flame hover:bg-card"
             >
               <div className="flex items-baseline gap-4">
                 <span className="text-[13px] font-semibold tracking-[0.08em] text-flame">

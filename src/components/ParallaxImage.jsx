@@ -31,7 +31,7 @@ export default function ParallaxImage({
   const scale = useTransform(smooth, [0, 0.5, 1], [1.06, 1, 1.06])
 
   return (
-    <div ref={ref} className={`relative overflow-hidden ${className}`}>
+    <div ref={ref} className={`relative isolate overflow-hidden ${className}`}>
       <motion.img
         src={src}
         alt={alt}
