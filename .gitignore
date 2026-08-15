@@ -1,0 +1,58 @@
+# ── Secrets ───────────────────────────────────────────────────────────
+# Never commit these. Anything here can reach a public repo permanently —
+# git history keeps a deleted file unless the history itself is rewritten.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+id_rsa*
+*.ppk
+credentials.json
+service-account*.json
+secrets.json
+.netrc
+.ftpconfig
+sftp-config.json
+.vscode/sftp.json
+deploy.config.js
+
+# ── Dependencies ──────────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ── Build output ──────────────────────────────────────────────────────
+dist/
+dist-ssr/
+*.local
+.vite/
+
+# Deploy bundles (regenerate with `npm run package`)
+*.zip
+*.tar
+*.tar.gz
+
+# ── Logs & caches ─────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.eslintcache
+.cache/
+coverage/
+
+# ── Editors & OS ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+*.swp
+*.swo
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json

@@ -1,0 +1,370 @@
+@import "tailwindcss";
+
+@theme {
+  --font-body: "Geist", ui-sans-serif, system-ui, sans-serif;
+
+  /* Ground — deep forest, lifted well clear of black so it reads rich
+     rather than gloomy. Three bands give the page rhythm. */
+  --color-paper: #0f1a16;
+  --color-paper-2: #14211c;
+  --color-card: #1b2a24;
+  --color-ink-deep: #0a120f;
+  --color-ink-2: #16241f;
+
+  /* Type */
+  --color-ink: #f1f5f2;
+  --color-slate: #a7b5ad;
+  --color-mute: #75837b;
+  --color-rule: #ffffff1f;
+
+  /* Two accents: emerald leads, amber answers. Saturated enough to carry
+     a page, short of neon. */
+  --color-cobalt: #35c48b;
+  --color-cobalt-2: #4bd79b;
+  --color-cobalt-ink: #062018;
+  --color-flame: #e8853a;
+  --color-flame-2: #ffa55e;
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --radius-card: 18px;
+  --radius-panel: 26px;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Anchored sections should clear the sticky header. */
+  scroll-padding-top: 88px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Light section ─────────────────────────────────────────────────────
+   One block on the page flips to paper. Every utility in the design system
+   resolves through these variables, so redefining them on a wrapper turns the
+   whole subtree light — no parallel set of classes to maintain. */
+.on-light {
+  /* Muted sage — a light tone, not a bright one. Sits well below white so it
+     reads as the same material as the dark ground, just lit. */
+  --color-paper: #bdc9bc;
+  --color-paper-2: #b4c1b3;
+  --color-card: #dde5db;
+  --color-ink: #0e1612;
+  --color-slate: #3a4640;
+  --color-mute: #58645e;
+  --color-rule: rgb(14 22 18 / 0.2);
+  --color-cobalt-2: #2aa877;
+
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+.on-light .on-dark {
+  --color-ink: #f1f5f2;
+  --color-slate: #a7b5ad;
+  --color-mute: #7c8983;
+  --color-rule: rgb(255 255 255 / 0.14);
+
+  background: #15211c;
+  color: var(--color-ink);
+}
+
+/* Cards on paper want a real shadow rather than a darker plane. Tinted green
+   so the shade belongs to the same light as everything else. */
+.on-light .card {
+  border-color: rgb(14 22 18 / 0.1);
+  box-shadow:
+    0 1px 2px rgb(14 22 18 / 0.08),
+    0 12px 26px -18px rgb(14 22 18 / 0.35);
+}
+
+.on-light .card:hover {
+  border-color: rgb(14 22 18 / 0.22);
+  box-shadow:
+    0 2px 4px rgb(14 22 18 / 0.1),
+    0 28px 52px -28px rgb(14 22 18 / 0.55);
+}
+
+.on-light ::selection {
+  background: rgb(53 196 139 / 0.25);
+  color: var(--color-ink);
+}
+
+/* Accent words inside a headline — same family, dropped a weight and set in
+   colour. One typeface across the site, but the phrase still reads as marked. */
+.accent {
+  font-weight: 400;
+  color: var(--color-cobalt);
+}
+
+.on-cobalt .accent {
+  color: var(--color-cobalt-ink);
+}
+
+/* Small-caps eyebrow, set in colour so it carries energy. */
+.eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.16em;
+  color: var(--color-cobalt);
+}
+
+.on-ink .eyebrow {
+  color: var(--color-flame-2);
+}
+
+.on-cobalt .eyebrow {
+  color: var(--color-cobalt-ink);
+}
+
+/* A rule that starts in colour and fades out — sits above section heads. */
+.rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--color-cobalt) 0%,
+    var(--color-cobalt) 8%,
+    var(--color-rule) 8%,
+    var(--color-rule) 100%
+  );
+}
+
+.on-ink .rule {
+  background: linear-gradient(
+    90deg,
+    var(--color-flame) 0%,
+    var(--color-flame) 8%,
+    var(--color-rule) 8%,
+    var(--color-rule) 100%
+  );
+}
+
+/* Raised card on the ground bands. */
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-rule);
+  transition:
+    transform 0.4s var(--ease-soft),
+    background-color 0.4s var(--ease-soft),
+    border-color 0.4s var(--ease-soft),
+    box-shadow 0.4s var(--ease-soft);
+}
+
+.card-lift {
+  transition:
+    transform 0.4s var(--ease-soft),
+    box-shadow 0.4s var(--ease-soft);
+}
+
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 40px 70px -34px rgb(53 196 139 / 0.6);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(53, 196, 139, 0.4);
+  box-shadow: 0 26px 52px -30px rgba(0, 0, 0, 0.9);
+}
+
+/* Glass. Used in exactly one place — the header — because that is the only
+   chrome that ever sits over a photograph. Solid fallback where the browser
+   has no backdrop-filter, otherwise it reads as a muddy panel. */
+.glass-bar {
+  background: rgb(15 26 22 / 0.92);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.07);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .glass-bar {
+    background: rgb(15 26 22 / 0.55);
+    backdrop-filter: blur(22px) saturate(1.7);
+    -webkit-backdrop-filter: blur(22px) saturate(1.7);
+  }
+}
+
+/* Ambient light — a single slow drift across the darkest section, at an
+   opacity you notice only by its absence. Not a rotating gradient; a room
+   with a window in it. */
+@keyframes drift {
+  0%   { transform: translate3d(-6%, -4%, 0) scale(1); }
+  50%  { transform: translate3d(6%, 4%, 0) scale(1.12); }
+  100% { transform: translate3d(-6%, -4%, 0) scale(1); }
+}
+
+.ambient {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background: radial-gradient(
+    42% 42% at 38% 32%,
+    rgb(53 196 139 / 0.09),
+    rgb(232 133 58 / 0.035) 45%,
+    transparent 72%
+  );
+  animation: drift 44s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ── Reveals ───────────────────────────────────────────────────────────
+   Visible by default. `.js` is added to <html> by an inline script in
+   index.html before first paint, so only browsers that are actually going to
+   run the animation ever hide anything. Nothing is blank while JS loads. */
+.js .reveal,
+.js .headline-word {
+  opacity: 0;
+  transform: translateY(var(--reveal-y, 24px));
+  transition:
+    opacity 0.75s var(--ease-soft),
+    transform 0.75s var(--ease-soft);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js .headline-word {
+  --reveal-y: 28px;
+}
+
+.js .reveal[data-shown="true"],
+.js .headline[data-shown="true"] .headline-word {
+  opacity: 1;
+  transform: none;
+}
+
+/* Images fade in as they decode, so lazy-loaded photographs do not pop. */
+.js .img-fade {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-soft);
+}
+
+.js .img-fade[data-loaded="true"] {
+  opacity: 1;
+}
+
+@keyframes page-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.js .page-in {
+  animation: page-in 0.32s var(--ease-soft) both;
+}
+
+/* ── Diagrams ──────────────────────────────────────────────────────────
+   Lines draw themselves in when the diagram enters view, nodes settle after.
+   Visible by default so a diagram is never a blank rectangle pre-hydration. */
+@keyframes draw-line {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes node-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+.js .diagram .pipe {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+}
+
+.js .diagram .node {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.js .diagram[data-shown="true"] .pipe {
+  animation: draw-line 0.85s var(--ease-soft) forwards;
+  animation-delay: calc(var(--i) * 150ms + 200ms);
+}
+
+.js .diagram[data-shown="true"] .node {
+  animation: node-in 0.6s var(--ease-soft) forwards;
+  animation-delay: calc(var(--i) * 150ms);
+}
+
+/* Live-status pulse — used sparingly, only where something is genuinely
+   meant to read as running right now. */
+@keyframes ping {
+  0% { transform: scale(1); opacity: 0.55; }
+  70%, 100% { transform: scale(2.4); opacity: 0; }
+}
+
+.ping::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--color-cobalt);
+  animation: ping 2.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Page grain — the paper/ink payoff. Fixed over the whole viewport at ~3%,
+   no motion, so near-black reads as printed rather than as flat digital black. */
+.page-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Photographic grain, on images. */
+.grain {
+  opacity: 0.14;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+:where(a, button):focus-visible {
+  outline: 2px solid var(--color-cobalt);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.on-cobalt :where(a, button):focus-visible {
+  outline-color: var(--color-cobalt-ink);
+}
+
+::selection {
+  background: rgba(53, 196, 139, 0.28);
+  color: var(--color-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .card-lift {
+  transition:
+    transform 0.4s var(--ease-soft),
+    box-shadow 0.4s var(--ease-soft);
+}
+
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 40px 70px -34px rgb(53 196 139 / 0.6);
+}
+
+.card:hover {
+    transform: none;
+  }
+
+  /* SMIL cannot be paused from CSS, so anything moving is hidden outright. */
+  .motion-only {
+    display: none;
+  }
+
+  .ping::after,
+  .ambient {
+    animation: none;
+  }
+}

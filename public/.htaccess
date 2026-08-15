@@ -1,0 +1,60 @@
+# Proxymedia — Apache config for SiteGround shared hosting.
+# Lives in /public so `npm run build` copies it into dist/ automatically.
+
+DirectoryIndex index.html
+
+# Serve /about from /about/index.html without bouncing to /about/ first.
+# Keeps the URL identical to the canonical in the page head.
+DirectorySlash Off
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Force https + non-www (swap this block if you prefer www).
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+  # 1. Real files (assets, images, robots.txt, sitemap.xml) are served as-is.
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+
+  # 2. A prerendered page exists for this path → serve it directly.
+  #    This is what makes /about, /contact and /what-we-do return their own
+  #    HTML rather than the app shell. Do not remove.
+  RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
+  RewriteRule ^(.+?)/?$ $1/index.html [L]
+
+  # 3. Anything else falls back to the shell so client-side routes still work.
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Hashed asset filenames change whenever the contents change, so they can be
+# cached hard. HTML must not be, or people get yesterday's page.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2|jpg|jpeg|png|webp|svg|avif)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  <FilesMatch "\.(html|xml|txt)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+</IfModule>

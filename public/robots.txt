@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# AI answer engines — allowed on purpose. A lot of "best automation company
+# in the UAE" style questions are answered by these now.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://proxymedia.ae/sitemap.xml
