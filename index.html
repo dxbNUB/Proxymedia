@@ -28,9 +28,13 @@
     <meta name="theme-color" content="#0f1a16" />
     <meta name="color-scheme" content="dark" />
 
-    <!-- The automation loop, same mark as the nav. SVG covers every modern
-         browser; apple-touch-icon is the one place iOS needs a raster. -->
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- The automation loop, same mark as the nav. All rasters are generated
+         from favicon.svg by scripts/icons.mjs, so they cannot drift.
+         favicon.ico must exist at the root even though it is declared here:
+         Google's favicon crawler and older clients request /favicon.ico
+         directly and ignore these tags. -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- Regional targeting -->
