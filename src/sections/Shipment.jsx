@@ -58,8 +58,12 @@ export default function Shipment() {
         <span className="ambient" />
       </span>
 
-      <div ref={trackRef} className="relative h-[240vh]">
-        <div className="sticky top-0 flex h-screen items-center supports-[height:100svh]:h-[100svh]">
+      {/* The pinned scroll sequence is desktop-only. On a phone the stack
+          inside it — headline, stage copy, dashboard — is far taller than the
+          viewport, and pinning it to 100svh simply clipped everything below
+          the fold. Under lg the section is an ordinary block that scrolls. */}
+      <div ref={trackRef} className="relative lg:h-[240vh]">
+        <div className="py-24 lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:py-0 lg:supports-[height:100svh]:h-[100svh]">
           <div className="mx-auto w-full max-w-[1280px] px-6 md:px-10">
             <div className="grid items-center gap-14 lg:grid-cols-[0.86fr_1.14fr] lg:gap-20">
               <div>
@@ -75,15 +79,17 @@ export default function Shipment() {
                 />
 
                 {/* Stage copy crossfades as the dashboard advances. */}
-                <div className="relative mt-9 h-[150px]">
+                {/* Desktop: the three stages occupy one box and crossfade as
+                    you scroll. Mobile: they stack and are all readable at once,
+                    since there is no pinned scroll to drive the sequence. */}
+                <div className="relative mt-9 space-y-7 lg:h-[150px] lg:space-y-0">
                   {stages.map((s, i) => (
                     <motion.div
                       key={s.label}
-                      className="absolute inset-0"
+                      className="stage-copy lg:absolute lg:inset-0"
                       initial={false}
                       animate={{ opacity: stage === i ? 1 : 0, y: stage === i ? 0 : 12 }}
                       transition={{ duration: 0.45, ease: EASE }}
-                      aria-hidden={stage !== i}
                     >
                       <p className="text-[19px] font-semibold tracking-[-0.02em] text-ink">
                         {s.title}

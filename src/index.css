@@ -401,6 +401,16 @@ body {
   color: var(--color-ink);
 }
 
+/* Below lg the shipment sequence is not pinned, so nothing drives its
+   crossfade — the scroll-linked opacity would leave two of the three stages
+   invisible. These beat Framer's inline styles, which is the point. */
+@media (max-width: 1023.98px) {
+  .stage-copy {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
