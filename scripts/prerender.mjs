@@ -9,6 +9,7 @@
  * Crawlers then get fully-formed markup with the right <title>, description
  * and canonical without executing a line of JavaScript. React hydrates on top.
  */
+import { createHash } from 'node:crypto'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -97,3 +98,32 @@ const notFound = template
 
 await writeFile(join(dist, '404.html'), notFound, 'utf8')
 console.log(`prerendered 404 → ${join(dist, '404.html').replace(root, '.')}`)
+
+/**
+ * The CSP in vercel.json allows inline scripts by hash. Editing the bootstrap
+ * script in index.html without updating that hash would get it blocked in the
+ * browser — and the failure is silent: reveals never arm, so the page looks
+ * fine locally (no CSP there) and subtly wrong in production. Fail the build
+ * instead.
+ */
+const csp = JSON.parse(await readFile(join(root, 'vercel.json'), 'utf8'))
+  .headers.flatMap((h) => h.headers)
+  .find((h) => h.key === 'Content-Security-Policy')?.value
+
+if (csp) {
+  const inline = template.matchAll(
+    /<script(?![^>]*\bsrc=)(?![^>]*type="application\/ld\+json")[^>]*>([\s\S]*?)<\/script>/g,
+  )
+
+  for (const [, body] of inline) {
+    const hash = `sha256-${createHash('sha256').update(body, 'utf8').digest('base64')}`
+    if (!csp.includes(hash)) {
+      console.error(
+        `\nInline script is not allowed by the CSP in vercel.json.\n` +
+          `Add this to script-src:\n\n  '${hash}'\n`,
+      )
+      process.exit(1)
+    }
+  }
+  console.log('csp inline script hashes ok')
+}
