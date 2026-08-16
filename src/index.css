@@ -158,6 +158,22 @@ body {
 }
 
 /* A rule that starts in colour and fades out — sits above section heads. */
+/* ── Hairlines that hold still ─────────────────────────────────────────
+   Every 1px line on this page — the .rule, the gap-px grids whose gaps are
+   the background showing through, the section borders — lands on a fractional
+   device pixel at most zoom levels and scroll offsets. While the page moves,
+   the browser re-rasterises them each frame and they alternate between
+   rounding up and down: the line strobes, doubles, or drops out entirely.
+
+   Promoting the elements that own those lines to their own composited layer
+   rasterises them once, so they stay put while the layer is translated. */
+[class*="gap-px"],
+.rule,
+.hairline {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
 .rule {
   height: 1px;
   background: linear-gradient(

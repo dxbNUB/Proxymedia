@@ -28,7 +28,11 @@ export default function ParallaxImage({
   })
 
   const y = useTransform(smooth, [0, 1], [range, -range])
-  const scale = useTransform(smooth, [0, 0.5, 1], [1.06, 1, 1.06])
+  // Never returns to exactly 1. At scale 1 the image edge lands precisely on
+  // the container edge, and a fractional scroll offset lets a hairline of the
+  // page behind show through the overflow-hidden seam — a line that appears
+  // and vanishes as you scroll. Staying slightly over keeps the edge covered.
+  const scale = useTransform(smooth, [0, 0.5, 1], [1.06, 1.02, 1.06])
 
   return (
     <div ref={ref} className={`relative isolate overflow-hidden ${className}`}>
