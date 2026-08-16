@@ -1,0 +1,20 @@
+# Supply chain is the realistic attack path for a static site: nobody breaks
+# into HTML, they get a malicious version of something the build depends on.
+# Weekly PRs keep the window short, grouped so it is one review, not twelve.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      all-dependencies:
+        patterns: ['*']
+
+  # The build itself runs on Actions if that is ever added; pinned action
+  # versions go stale the same way packages do.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
