@@ -36,10 +36,16 @@ export default function Hero() {
           the business in one picture — copy sits over the field side. */}
       <div
         ref={ref}
-        className="relative isolate flex min-h-[70svh] items-center overflow-hidden md:min-h-[76svh]"
+        // translateZ(0): the clip boundary is rasterised on its own layer, so
+        // it stops being recomputed against the moving image every frame.
+        className="relative isolate flex min-h-[70svh] items-center overflow-hidden [transform:translateZ(0)] md:min-h-[76svh]"
       >
+        {/* -inset-px, not inset-0: the layer is transformed on a scroll spring,
+            so its edges sit on fractional device pixels. Flush against the
+            clip boundary that leaves a 1px translucent seam that appears and
+            disappears as you scroll. A pixel of overhang costs nothing. */}
         <motion.div
-          className="absolute inset-0 will-change-transform"
+          className="absolute -inset-px will-change-transform"
           style={reduced ? undefined : { y, scale }}
         >
           <picture>
@@ -64,9 +70,13 @@ export default function Hero() {
           aria-hidden="true"
           className="absolute inset-0 bg-[linear-gradient(100deg,rgba(10,18,15,0.94)_0%,rgba(10,18,15,0.82)_34%,rgba(10,18,15,0.35)_62%,rgba(10,18,15,0.1)_100%)]"
         />
+        {/* Overhangs the bottom by a pixel for the same reason: this gradient
+            resolves to --color-paper, and the section beneath is the same
+            colour, so any rounding gap between them shows a sliver of the
+            photograph as a bright hairline. */}
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-64 bg-[linear-gradient(to_top,var(--color-paper)_18%,rgba(15,26,22,0.6)_55%,transparent)]"
+          className="absolute inset-x-0 -bottom-px h-64 bg-[linear-gradient(to_top,var(--color-paper)_18%,rgba(15,26,22,0.6)_55%,transparent)]"
         />
         <span aria-hidden="true" className="grain pointer-events-none absolute inset-0" />
 

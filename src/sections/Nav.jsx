@@ -26,7 +26,11 @@ export default function Nav() {
   const section = useScrollSpy(SPIED)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16)
+    // Hysteresis, not one threshold: a single trip point at 16px means any
+    // scroll that hovers around it toggles the bar's hairline border on and
+    // off every frame, which reads as a flickering line across the hero.
+    const onScroll = () =>
+      setScrolled((was) => (was ? window.scrollY > 8 : window.scrollY > 28))
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
