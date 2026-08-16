@@ -8,6 +8,7 @@ import WhatWeDo from './pages/WhatWeDo'
 import About from './pages/About'
 import Clients from './pages/Clients'
 import ContactPage from './pages/ContactPage'
+import NotFound from './pages/NotFound'
 import useSeo from './hooks/useSeo'
 
 /**
@@ -52,17 +53,22 @@ export default function App() {
   return (
     <>
       <ScrollManager />
+      {/* First tab stop: lets keyboard and screen-reader users past the nav
+          without tabbing every link on every page. Off-screen until focused. */}
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
       <span aria-hidden="true" className="page-grain" />
       <ScrollProgress />
       <Nav />
-      <main key={pathname} className="page-in">
+      <main id="main" key={pathname} className="page-in">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/what-we-do" element={<WhatWeDo />} />
           <Route path="/about" element={<About />} />
           <Route path="/clients" element={<Clients />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />

@@ -3,12 +3,21 @@ import Headline from '../components/Headline'
 import ParallaxImage from '../components/ParallaxImage'
 import Reveal from '../components/Reveal'
 
-/* TODO — replace with the agreed Menaap figures before this page goes public. */
+/*
+ * Fill in the agreed Menaap figures and the block renders itself.
+ *
+ * Until then it stays hidden: a stat row reading "—% lift in their key metric"
+ * looks like broken rendering, not a deliberate hold, and it does that on the
+ * one section whose whole job is proving measurable results. Anything still
+ * containing an em dash counts as unset.
+ */
 const metrics = [
   { value: '—%', label: 'lift in their key metric' },
   { value: '— days', label: 'off the cycle' },
   { value: '— hrs', label: 'saved each week' },
 ]
+
+const hasFigures = metrics.every((m) => !m.value.includes('—'))
 
 export default function CaseStudy() {
   return (
@@ -42,6 +51,7 @@ export default function CaseStudy() {
               </p>
             </Reveal>
 
+            {hasFigures ? (
             <Reveal delay={1000}>
               <dl className="mt-12 grid gap-px overflow-hidden rounded-card bg-white/10 sm:grid-cols-3">
                 {metrics.map((m) => (
@@ -56,6 +66,7 @@ export default function CaseStudy() {
                 ))}
               </dl>
             </Reveal>
+            ) : null}
           </div>
         </div>
       </div>

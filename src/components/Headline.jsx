@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 
 /**
  * Word-by-word fade-up headline. `text` is the plain headline; any trailing
@@ -54,20 +54,28 @@ export default function Headline({
     <Tag
       ref={ref}
       data-shown={shown ? 'true' : undefined}
-      className={`headline flex flex-wrap gap-x-[0.26em] gap-y-1 ${className}`}
+      className={`headline ${className}`}
     >
+      {/* Real spaces between the words, not a flexbox gap. With `display:flex`
+          the whitespace between items is discarded, so textContent came out as
+          "Weautomateyourbusiness." — which is what a crawler, a reader mode, a
+          translation tool, or anyone copying the headline actually gets. The
+          words are inline-block so they can still be transformed individually;
+          normal inline layout wraps them and puts the spaces back. */}
       {words.map((word, i) => (
-        <span
-          key={`${word}-${i}`}
-          className="headline-word inline-block"
-          style={{ '--reveal-delay': `${delay + i * 80}ms` }}
-        >
-          {accentFrom >= 0 && i >= accentFrom ? (
-            <em className="accent">{word}</em>
-          ) : (
-            word
-          )}
-        </span>
+        <Fragment key={`${word}-${i}`}>
+          <span
+            className="headline-word inline-block"
+            style={{ '--reveal-delay': `${delay + i * 80}ms` }}
+          >
+            {accentFrom >= 0 && i >= accentFrom ? (
+              <em className="accent">{word}</em>
+            ) : (
+              word
+            )}
+          </span>
+          {i < words.length - 1 ? ' ' : null}
+        </Fragment>
       ))}
     </Tag>
   )

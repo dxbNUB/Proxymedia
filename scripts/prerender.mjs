@@ -72,3 +72,28 @@ for (const [path, meta] of Object.entries(routes)) {
   await writeFile(join(outDir, 'index.html'), html, 'utf8')
   console.log(`prerendered ${path} → ${join(outDir, 'index.html').replace(root, '.')}`)
 }
+
+/**
+ * dist/404.html — Vercel serves this for any unknown path on a static build,
+ * which is how the site keeps its own branding and navigation on a bad URL
+ * instead of falling back to the platform's plain-text NOT_FOUND page.
+ *
+ * Deliberately not a catch-all rewrite to index.html: that would hand the
+ * homepage's markup to every route and undo the per-page HTML above.
+ */
+const notFound = template
+  .replace(/<title>[\s\S]*?<\/title>/, '<title>Page not found | Proxymedia</title>')
+  .replace(
+    /(<meta\s+name="description"\s+content=")[\s\S]*?(")/,
+    '$1That page does not exist. Find what you were looking for on the Proxymedia site.$2',
+  )
+  // No canonical and no indexing: this markup is served under many URLs.
+  .replace(/<link rel="canonical"[^>]*>/, '')
+  .replace(
+    /<meta name="robots"[^>]*>/,
+    '<meta name="robots" content="noindex, follow" />',
+  )
+  .replace('<div id="root"></div>', `<div id="root">${render('/404')}</div>`)
+
+await writeFile(join(dist, '404.html'), notFound, 'utf8')
+console.log(`prerendered 404 → ${join(dist, '404.html').replace(root, '.')}`)

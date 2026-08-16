@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import Logo from './Logo'
 
 /**
  * ── SET YOUR CALENDLY LINK ─────────────────────────────────────────────
@@ -97,11 +98,25 @@ export default function CalendlyEmbed({ height = 680 }) {
       ref={ref}
       className="overflow-hidden rounded-panel border border-white/12 bg-card"
     >
-      <div
-        className="calendly-inline-widget"
-        data-url={`${CALENDLY_URL}?${THEME}`}
-        style={{ minWidth: '320px', height: `${height}px` }}
-      />
+      {/* Placeholder underneath the widget, not beside it: Calendly paints its
+          iframe over this once ready, so there is no state to clear and no
+          flash if it is slow. The embed takes ~4s on a cold load, which is a
+          long time to show an empty white rectangle on the page that converts. */}
+      <div className="relative" style={{ minHeight: `${height}px` }}>
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-card"
+        >
+          <Logo size={30} stroke={2.6} motion="run" wordmark={false} />
+          <p className="text-[14.5px] text-mute">Loading the calendar…</p>
+        </div>
+
+        <div
+          className="calendly-inline-widget relative"
+          data-url={`${CALENDLY_URL}?${THEME}`}
+          style={{ minWidth: '320px', height: `${height}px` }}
+        />
+      </div>
       <noscript>
         <p className="p-8 text-[15px] text-slate">
           Booking needs JavaScript. Email{' '}
