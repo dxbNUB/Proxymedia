@@ -11,16 +11,16 @@
     "package": "npm run build && node scripts/package.mjs"
   },
   "dependencies": {
-    "framer-motion": "^13.1.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-router-dom": "^7.18.2"
+    "framer-motion": "^14.9.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.5"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.1.11",
-    "@vitejs/plugin-react": "^4.5.2",
-    "sharp": "^0.35.3",
+    "@tailwindcss/vite": "^4.3.4",
+    "@vitejs/plugin-react": "^6.2.1",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.1.11",
-    "vite": "^6.3.5"
+    "vite": "^8.3.6"
   }
 }
